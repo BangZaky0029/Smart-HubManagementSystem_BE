@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Room;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRoomRequest extends FormRequest
 {
@@ -15,7 +16,12 @@ class UpdateRoomRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'code' => 'sometimes|string|max:50|unique:rooms,code,' . $this->route('room'),
+            'code' => [
+                'sometimes',
+                'string',
+                'max:50',
+                Rule::unique('rooms', 'code')->ignore($this->route('room')),
+            ],
             'description' => 'nullable|string',
             'capacity' => 'sometimes|integer|min:1',
             'facilities' => 'nullable|array',
