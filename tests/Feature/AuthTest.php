@@ -52,7 +52,11 @@ class AuthTest extends TestCase
             'password' => 'incorrect-password',
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(401)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Invalid credentials.',
+            ]);
     }
 
     public function test_unauthenticated_user_cannot_access_protected_routes(): void
